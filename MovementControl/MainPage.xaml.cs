@@ -33,8 +33,6 @@ namespace MovementControl
         private RobotControl robotControl;
         private bool startTransfer = false;
 
-        private bool toggleMode = true;
-
         public MainPage()
         {
             this.InitializeComponent();
@@ -111,9 +109,8 @@ namespace MovementControl
                     // Send control data to openCM via usb
 
                     // Condition one is set - move forward
-                    if (toggleMode)
+                    if (true)
                     {
-
                         robotControl.moveForward(stepsize, velocity, steps);
                         //robotControl.testFunction(66);
                         //toggleMode = false;
@@ -125,12 +122,6 @@ namespace MovementControl
                 }
                 Task.Delay(-1).Wait(1000);
             }
-        }
-
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-            if (toggleMode) toggleMode = false;
-            else toggleMode = true;
         }
     }
 }

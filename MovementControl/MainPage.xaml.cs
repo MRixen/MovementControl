@@ -52,37 +52,44 @@ namespace MovementControl
 
         }
 
-
         private async void initComPort_task()
         {
             var deviceSelector = SerialDevice.GetDeviceSelector();
             var devices = await DeviceInformation.FindAllAsync(deviceSelector);
             int i = 0;
-            foreach (var item in devices)
+            try
             {
-                // Find openCM device
-                var port = await SerialDevice.FromIdAsync(devices[i].Id);
-                if (port.UsbVendorId == 65521)
+                foreach (var item in devices)
                 {
-                    Debug.WriteLine("Device found");
-                    Debug.WriteLine("UsbVendorId: " + port.UsbVendorId);
-                    Debug.WriteLine("UsbProductId: " + port.UsbProductId);
+                    // Find openCM device
+                    var port = await SerialDevice.FromIdAsync(devices[i].Id);
+                    if (port.UsbVendorId == 65521)
+                    {
+                        Debug.WriteLine("Device found");
+                        Debug.WriteLine("UsbVendorId: " + port.UsbVendorId);
+                        Debug.WriteLine("UsbProductId: " + port.UsbProductId);
 
-                    // Configure port
-                    port.BaudRate = 115200;
-                    port.DataBits = 8;
-                    port.StopBits = SerialStopBitCount.One;
-                    port.Parity = SerialParity.None;
-                    port.Handshake = SerialHandshake.None;
-                    port.ReadTimeout = TimeSpan.FromMilliseconds(1000);
-                    port.WriteTimeout = TimeSpan.FromMilliseconds(1000);
+                        // Configure port
+                        port.BaudRate = 115200;
+                        port.DataBits = 8;
+                        port.StopBits = SerialStopBitCount.One;
+                        port.Parity = SerialParity.None;
+                        port.Handshake = SerialHandshake.None;
+                        port.ReadTimeout = TimeSpan.FromMilliseconds(1000);
+                        port.WriteTimeout = TimeSpan.FromMilliseconds(1000);
 
-                    globalDataSet.Port = port;
+                        globalDataSet.Port = port;
 
-                    startTransfer = true;
-                    break;
+                        startTransfer = true;
+                        break;
+                    }
+                    else i++;
+                    if (!startTransfer) Debug.WriteLine("No device found");
                 }
-                else i++;
+            }
+            catch(NullReferenceException e)
+            {
+                Debug.WriteLine("!!! NullReferenceException in devices !!!");
             }
         }
 

@@ -111,7 +111,6 @@ C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\D
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\System.Xml.XDocument.dll
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\System.Xml.XmlDocument.dll
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\System.Xml.XmlSerializer.dll
-C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MovementControl.csprojResolveAssemblyReference.cache
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\App.g.i.cs
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\App.g.cs
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MainPage.g.i.cs

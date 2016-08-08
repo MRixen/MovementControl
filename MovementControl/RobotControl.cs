@@ -12,8 +12,8 @@ namespace MovementControl
     {
         GlobalDataSet globalDataSet;
         byte[] speed = new byte[1];
-        byte[] position, ids;
-        byte[] byteArray = new byte[35];
+        byte[] position, ids,msgStart, msgEnd;
+        byte[] byteArray = new byte[8];
 
 
         public RobotControl(GlobalDataSet globalDataSet)
@@ -24,28 +24,29 @@ namespace MovementControl
 
         public void initControlData()
         {
-            // Set ids
-            ids = BitConverter.GetBytes((short)500);
-            byteArray[0] = ids[0];
-            byteArray[1] = ids[1];
+            // Set start of message
+            msgStart = BitConverter.GetBytes(256);
+            for (int i = 0; i < msgStart.Length; i++)
+            {
+                byteArray[i] = msgStart[i];
+                Debug.WriteLine(msgStart[i]);
+            }
 
-            Debug.WriteLine("ids[0]: " + ids[0]);
-            Debug.WriteLine("ids[1]: " + ids[1]);
+            Debug.WriteLine("Converted: " + BitConverter.ToInt32(msgStart, 0));
+
+            // Set ids
+            ids = BitConverter.GetBytes((short)1);
+            //byteArray[2] = ids[0];
+            //byteArray[3] = ids[1];
         }
 
-        public async void moveForward(int stepsize, int velocity, int steps)
+        public void moveForward(int stepsize, int velocity, int steps)
         {
             // Set speed
             speed = BitConverter.GetBytes(velocity);
-            byteArray[2] = speed[0];
+            //byteArray[4] = speed[0];
 
-            // FOR TESTING
-            //byte[] posTemp1 = { 5, 50, 100, 200, 0 };
-            byte[] posTemp1 = { 5 };
-            //byte[] posTemp2 = { 5, 50, 100, 200, 0 };
-            byte[] posTemp2 = { 5 };
-
-            int maxTableSize = posTemp1.Length;
+            int maxTableSize = 5;
 
             for (int i = 0; i < steps; i++)
             {
@@ -65,14 +66,19 @@ namespace MovementControl
                     // Sum: 35 byte to send for 16 dxls in one cycle
 
                     // Set position from database for dxl 1
-                    position = BitConverter.GetBytes((short)posTemp1[i]);
-                    byteArray[3] = position[0];
-                    byteArray[4] = position[1];
+                    position = BitConverter.GetBytes((short)50 * maxTableSize);
+                    //byteArray[5] = position[0];
+                    //byteArray[6] = position[1];
 
                     // Set position from database for dxl 2
-                    position = BitConverter.GetBytes((short)posTemp2[i]);
-                    byteArray[5] = position[0];
-                    byteArray[6] = position[1];
+                    position = BitConverter.GetBytes((short)50 * maxTableSize);
+                    //byteArray[7] = position[0];
+                    //byteArray[8] = position[1];
+
+                    // Set end of message
+                    msgEnd = BitConverter.GetBytes((short)8888);
+                    //byteArray[9] = msgEnd[0];
+                    //byteArray[10] = msgEnd[1];
 
                     sendToPort(byteArray);
                 }
@@ -81,7 +87,6 @@ namespace MovementControl
 
         private async void sendToPort(byte[] byteArray)
         {
-            byte[] byteArray1 = { 244 };
             var bufferArray = byteArray.AsBuffer();
             await globalDataSet.Port.OutputStream.WriteAsync(bufferArray);
         }

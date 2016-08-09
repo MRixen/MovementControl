@@ -189,3 +189,4 @@ C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\D
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\qualifiers.txt.intermediate
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MultipleQualifiersPerDimensionFound.txt
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\ProjectArchitectures.txt
+C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MovementControl.csprojResolveAssemblyReference.cache

@@ -68,7 +68,7 @@ namespace MovementControl
                         Debug.WriteLine("UsbProductId: " + port.UsbProductId);
 
                         // Configure port
-                        port.BaudRate = 115200;
+                        port.BaudRate = 9600;
                         port.DataBits = 8;
                         port.StopBits = SerialStopBitCount.One;
                         port.Parity = SerialParity.None;

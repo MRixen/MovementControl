@@ -190,3 +190,6 @@ C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\D
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MultipleQualifiersPerDimensionFound.txt
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\ProjectArchitectures.txt
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MovementControl.csprojResolveAssemblyReference.cache
+C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\MySql.Data.RT.dll
+C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MySql.Data.RT\en-US\MySql.Data.RT.Properties.Resources.resw
+C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MovementControl.csproj.GenerateResource.Cache

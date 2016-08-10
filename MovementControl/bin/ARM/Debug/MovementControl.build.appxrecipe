@@ -330,6 +330,9 @@
     <AppxPackagedFile Include="C:\Users\Manuel.Rixen\.nuget\packages\System.Xml.XmlSerializer\4.0.10\lib\netcore50\System.Xml.XmlSerializer.dll">
       <PackagePath>System.Xml.XmlSerializer.dll</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Manuel.Rixen\Desktop\New folder\RT\MySql.Data.RT.dll">
+      <PackagePath>MySql.Data.RT.dll</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\Properties\Default.rd.xml">
       <PackagePath>Properties\Default.rd.xml</PackagePath>
     </AppxPackagedFile>

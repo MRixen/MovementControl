@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -28,26 +29,74 @@ namespace MovementControl
     public sealed partial class MainPage : Page
     {
         private Task task_robotControl;
-        private Task task_initComPort;
+        private Task task_initComPort, task_initDatabase;
         private GlobalDataSet globalDataSet;
         private RobotControl robotControl;
         private bool startTransfer = false;
+        private Class1 class1;
 
         public MainPage()
         {
             this.InitializeComponent();
 
+            // Add this to prevent encoding errors
+            System.Text.EncodingProvider ppp;
+            ppp = System.Text.CodePagesEncodingProvider.Instance;
+            Encoding.RegisterProvider(ppp);
+
             // Init
             globalDataSet = new GlobalDataSet();
             robotControl = new RobotControl(globalDataSet);
-            task_initComPort = new Task(initComPort_task);
-            task_initComPort.Start();
-            task_initComPort.Wait();
+            //task_initComPort = new Task(initComPort_task);
+            //task_initComPort.Start();
+            //task_initComPort.Wait();
+
+            //task_initDatabase = new Task(initDatabase_task);
+            //task_initDatabase.Start();
+            //task_initDatabase.Wait();
+
+            //initDatabase_task();
 
             // Start control algorithm
-            task_robotControl = new Task(robotControl_task);
-            task_robotControl.Start();
+            //task_robotControl = new Task(robotControl_task);
+            //task_robotControl.Start();
 
+            class1 = new Class1();
+        }
+
+        private void initDatabase_task()
+        {
+
+            string connectionString = "Server=192.168.0.66;Database=moveForward;Uid=root;Pwd=rbc;SslMode=None;";
+            using (MySqlConnection dbConn = new MySqlConnection(connectionString))
+            {
+                //MySqlCommand dbCmd = new MySqlCommand("INSERT INTO s1(x, y, z, timestamp) VALUES('" + 1111 + "', '" + 1111 + "', '" + 1111 + "', '" + 1111 + "')", dbConn); 
+                MySqlCommand dbCmd = new MySqlCommand("SELECT * FROM s1", dbConn);
+                MySqlDataReader dr;
+                dbConn.Open();
+                dr = dbCmd.ExecuteReader();
+
+                int count = 0;
+
+                while (dr.Read())
+                {
+                    count += 1;
+                }
+
+                //using (MySqlCommand dbCmd = new MySqlCommand("s0", dbConn))
+                //{
+                //    for (int i = 0; i < 1; i++)
+                //    {
+                //        dbCmd.CommandType = CommandType.StoredProcedure;
+                //        dbCmd.Parameters.Add("x", MySqlDbType.Int32).Value = 1111;
+                //        dbCmd.Parameters.Add("y", MySqlDbType.Int32).Value = 1111;
+                //        dbCmd.Parameters.Add("z", MySqlDbType.Int32).Value = 1111;
+                //        dbCmd.Parameters.Add("timestamp", MySqlDbType.Int32).Value = 1111;
+                //    }
+
+                //dbCmd.ExecuteNonQuery();
+                //}
+            }
         }
 
         private async void initComPort_task()
@@ -85,7 +134,7 @@ namespace MovementControl
                     if (!startTransfer) Debug.WriteLine("No device found");
                 }
             }
-            catch(NullReferenceException e)
+            catch (NullReferenceException e)
             {
                 Debug.WriteLine("!!! NullReferenceException in devices !!!");
             }
@@ -94,6 +143,12 @@ namespace MovementControl
         public async void robotControl_task()
         {
             await Task.Run(() => execServ_openCM());
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            initDatabase_task();
+            //class1.InsertTemp(1111, 1111, 1111, 1111);
         }
 
         private void execServ_openCM()

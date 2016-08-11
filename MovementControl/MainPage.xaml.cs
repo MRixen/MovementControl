@@ -71,17 +71,27 @@ namespace MovementControl
             using (MySqlConnection dbConn = new MySqlConnection(connectionString))
             {
                 //MySqlCommand dbCmd = new MySqlCommand("INSERT INTO s1(x, y, z, timestamp) VALUES('" + 1111 + "', '" + 1111 + "', '" + 1111 + "', '" + 1111 + "')", dbConn); 
-                MySqlCommand dbCmd = new MySqlCommand("SELECT * FROM s1", dbConn);
-                MySqlDataReader dr;
+                MySqlCommand dbCmd = new MySqlCommand("SELECT * FROM s0", dbConn);
                 dbConn.Open();
-                dr = dbCmd.ExecuteReader();
 
                 int count = 0;
 
-                while (dr.Read())
+                int[] data = new int[4];
+
+                // Read from database
+                using (MySqlDataReader reader = dbCmd.ExecuteReader())
                 {
-                    count += 1;
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < 4; i++)
+                        {
+                            data[i] = reader.GetInt32(i);
+                        }
+                    }
                 }
+
+
+
 
                 //using (MySqlCommand dbCmd = new MySqlCommand("s0", dbConn))
                 //{

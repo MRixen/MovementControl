@@ -1186,7 +1186,7 @@ namespace MovementControl
         public void initControlData()
         {
             // Set start of message
-            msgStart = BitConverter.GetBytes(9999);
+            msgStart = BitConverter.GetBytes((short)9999);
             for (int i = 0; i < msgStart.Length; i++) byteArray[i] = msgStart[i];
 
             // Set ids
@@ -1198,7 +1198,7 @@ namespace MovementControl
         public void moveForward(int stepsize, int velocity, int steps)
         {
             // Set speed
-            speed = BitConverter.GetBytes(velocity);
+            speed = BitConverter.GetBytes((short)velocity);
             for (int i = 0; i < speed.Length; i++) byteArray[i + 8] = speed[i];
 
             for (int k = 0; k < steps; k++)
@@ -1206,15 +1206,15 @@ namespace MovementControl
                 for (int j = 0; j < positionList1.Length; j++)
                 {
                     // Set position from database for dxl 1
-                    position = BitConverter.GetBytes(positionList0[j]);
+                    position = BitConverter.GetBytes((short)positionList0[j]);
                     for (int i = 0; i < position.Length; i++) byteArray[i + 12] = position[i];
 
                     // Set position from database for dxl 2
-                    position = BitConverter.GetBytes(positionList1[j]);
+                    position = BitConverter.GetBytes((short)positionList1[j]);
                     for (int i = 0; i < position.Length; i++) byteArray[i + 16] = position[i];
 
                     // Set end of message
-                    msgEnd = BitConverter.GetBytes(8888);
+                    msgEnd = BitConverter.GetBytes((short)8888);
                     for (int i = 0; i < msgEnd.Length; i++) byteArray[i + 20] = msgEnd[i];
 
                     sendToPort(byteArray);

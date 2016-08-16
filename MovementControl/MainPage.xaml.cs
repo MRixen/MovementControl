@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace MovementControl
         private GlobalDataSet globalDataSet;
         private RobotControl robotControl;
         private bool startTransfer = false;
-        private Class1 class1;
+        private LocalDbManagement localDbManagement;
 
         public MainPage()
         {
@@ -46,66 +47,53 @@ namespace MovementControl
 
             // Init
             globalDataSet = new GlobalDataSet();
-            robotControl = new RobotControl(globalDataSet);
+            localDbManagement = new LocalDbManagement(globalDataSet);
+            robotControl = new RobotControl(globalDataSet, localDbManagement);
+
+            task_initDatabase = new Task(initDatabase_task);
+            task_initDatabase.Start();
+            task_initDatabase.Wait();
+
+
             //task_initComPort = new Task(initComPort_task);
             //task_initComPort.Start();
             //task_initComPort.Wait();
 
-            //task_initDatabase = new Task(initDatabase_task);
-            //task_initDatabase.Start();
-            //task_initDatabase.Wait();
-
-            //initDatabase_task();
-
             // Start control algorithm
             //task_robotControl = new Task(robotControl_task);
             //task_robotControl.Start();
-
-            class1 = new Class1();
         }
 
         private void initDatabase_task()
         {
+            // Create local db
+            int[] data = new int[4];
+            localDbManagement.createDb("moveforward");
 
-            string connectionString = "Server=192.168.0.66;Database=moveForward;Uid=root;Pwd=rbc;SslMode=None;";
+            // Connect to remote db
+            string connectionString = "Server=192.168.0.66;Database=moveforward;Uid=root;Pwd=rbc;SslMode=None;";
             using (MySqlConnection dbConn = new MySqlConnection(connectionString))
             {
-                //MySqlCommand dbCmd = new MySqlCommand("INSERT INTO s1(x, y, z, timestamp) VALUES('" + 1111 + "', '" + 1111 + "', '" + 1111 + "', '" + 1111 + "')", dbConn); 
-                MySqlCommand dbCmd = new MySqlCommand("SELECT * FROM s0", dbConn);
-                dbConn.Open();
-
-                int count = 0;
-
-                int[] data = new int[4];
-
-                // Read from database
-                using (MySqlDataReader reader = dbCmd.ExecuteReader())
+                // Read from remote db and save content to local db 
+                // Todo: Read more tables -> Actual we read only s0 and s1
+                for (int i = 0; i < 2; i++)
                 {
-                    while (reader.Read())
+                    MySqlCommand dbCmd = new MySqlCommand("SELECT * FROM s" + i, dbConn);
+                    dbConn.Open();
+
+                    using (MySqlDataReader reader = dbCmd.ExecuteReader())
                     {
-                        for (int i = 0; i < 4; i++)
+                        while (reader.Read())
                         {
-                            data[i] = reader.GetInt32(i);
+                            for (int j = 0; j < 4; j++) data[i] = reader.GetInt32(j);
+                            if (i == 0) localDbManagement.insertToTable_s0(data, "moveforward");
+                            if (i == 1) localDbManagement.insertToTable_s1(data, "moveforward");
                         }
                     }
+                    dbConn.Close();
                 }
-
-
-
-
-                //using (MySqlCommand dbCmd = new MySqlCommand("s0", dbConn))
-                //{
-                //    for (int i = 0; i < 1; i++)
-                //    {
-                //        dbCmd.CommandType = CommandType.StoredProcedure;
-                //        dbCmd.Parameters.Add("x", MySqlDbType.Int32).Value = 1111;
-                //        dbCmd.Parameters.Add("y", MySqlDbType.Int32).Value = 1111;
-                //        dbCmd.Parameters.Add("z", MySqlDbType.Int32).Value = 1111;
-                //        dbCmd.Parameters.Add("timestamp", MySqlDbType.Int32).Value = 1111;
-                //    }
-
-                //dbCmd.ExecuteNonQuery();
-                //}
+                // Set z data of tables to list, so we can use it inside movement control algorithm
+                localDbManagement.setDataLists_z("moveforward");
             }
         }
 
@@ -155,30 +143,21 @@ namespace MovementControl
             await Task.Run(() => execServ_openCM());
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-            initDatabase_task();
-            //class1.InsertTemp(1111, 1111, 1111, 1111);
-        }
-
         private void execServ_openCM()
         {
             int stepsize = 100; // In percentage of max stepsize
-            int velocity = 100; // In percentage of max velocity
+            int velocity = 300; // In percentage of max velocity
             int steps = 1;
 
             while (!globalDataSet.StopAllOperations)
             {
+                // Send control data to openCM via usb
                 if (startTransfer)
                 {
-                    // Send control data to openCM via usb
-
                     // Condition one is set - move forward
                     if (true)
                     {
                         robotControl.moveForward(stepsize, velocity, steps);
-                        //robotControl.testFunction(66);
-                        //toggleMode = false;
                     }
 
                     // Condition two is set - move backward

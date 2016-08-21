@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Windows.Storage.Streams;
 
 namespace MovementControl
 {
@@ -16,6 +18,37 @@ namespace MovementControl
         byte[] byteArray = new byte[64];
         int maxRotAngle = 300;
         int maxIncrements = 1024;
+        byte positionReached = 2;
+
+        int SMOOTH_ZONE = 3; // Zone to set position reached bit
+        int counter = 0;
+
+        short[] dataArray = { 52,
+        107,
+        133,
+        144,
+        151,
+        160,
+        173,
+        189,
+        209,
+        229,
+        248,
+        263,
+        273,
+        276,
+        274,
+        266,
+        254,
+        239,
+        223,
+        207,
+        189,
+        168,
+        138,
+        88};
+        //short[] dataArray = { 300, 0 };
+
         // NOTE: MAX 8 IDs per cycle available, because there is a problem to send more than one byte...
         // TODO: Load txt-files into cloud / database and implement possibility to download txt-file from raspberry and import as list
 
@@ -23,6 +56,19 @@ namespace MovementControl
         {
             this.globalDataSet = globalDataSet;
             this.localDbManagement = localDbManagement;
+        }
+
+        public async void readSomething()
+        {
+            byte[] byteArrayIn = new byte[64];
+            var bufferArrayIn = byteArrayIn.AsBuffer();
+            if (globalDataSet.FirstWriteExecuted)
+            {
+                await globalDataSet.Port.InputStream.ReadAsync(bufferArrayIn, 1, InputStreamOptions.Partial);
+                byte retVal = bufferArrayIn.GetByte(0);
+                //Debug.WriteLine("retVal: " + retVal);
+                if (retVal == 1) globalDataSet.NextPositionRequest = true;
+            }
         }
 
         public void moveForward(int stepsize, int velocity, int steps)
@@ -46,18 +92,26 @@ namespace MovementControl
 
             for (int k = 0; k < steps; k++)
             {
-                // Note: The lists in a table need to have the same length
-                for (int p = 0; p < globalDataSet.ZData_s0.Count; p++)
+                counter = 0;
+                // TODO: Add length variable for the count of rows per table (not hardcoded 23!!!)
+                while (counter < 23)
                 {
-                    // Set position from database for dxl 1
-                    position = BitConverter.GetBytes((short)globalDataSet.ZData_s0[p]);
-                    for (int i = 0; i < position.Length; i++) byteArray[i + 8] = position[i];
+                    if (globalDataSet.NextPositionRequest)
+                    {
+                        // Set position from database for dxl 1
+                        position = BitConverter.GetBytes((short)globalDataSet.Moveforward.ElementAt(0).s0[counter]);
+                        //position = BitConverter.GetBytes((short)dataArray[counter]);
+                        for (int i = 0; i < position.Length; i++) byteArray[i + 8] = position[i];
 
-                    // Set position from database for dxl 2
-                    position = BitConverter.GetBytes((short)globalDataSet.ZData_s1[p]);
-                    for (int i = 0; i < position.Length; i++) byteArray[i + 10] = position[i];
+                        // Set position from database for dxl 2
+                        position = BitConverter.GetBytes((short)globalDataSet.Moveforward.ElementAt(1).s1[counter]);
+                        //position = BitConverter.GetBytes((short)dataArray[counter]);
+                        for (int i = 0; i < position.Length; i++) byteArray[i + 10] = position[i];
 
-                    sendToPort(byteArray);
+                        globalDataSet.NextPositionRequest = false;
+                        counter++;
+                        sendToPort(byteArray);
+                    }
                 }
             }
         }
@@ -66,6 +120,7 @@ namespace MovementControl
         {
             var bufferArray = byteArray.AsBuffer();
             await globalDataSet.Port.OutputStream.WriteAsync(bufferArray);
+            globalDataSet.FirstWriteExecuted = true;
         }
 
         public void moveBackward()
@@ -81,13 +136,6 @@ namespace MovementControl
         public void moveLeft()
         {
 
-        }
-
-        public async void testFunction(byte data)
-        {
-            byte[] byteArray = { data };
-            var bufferArray = byteArray.AsBuffer();
-            await globalDataSet.Port.OutputStream.WriteAsync(bufferArray);
         }
     }
 }

@@ -23,6 +23,8 @@ C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\D
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\System.dll
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\Microsoft.VisualBasic.dll
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\Microsoft.Win32.Primitives.dll
+C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\SQLite.Net.Platform.WinRT.dll
+C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\SQLite.Net.dll
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\System.AppContext.dll
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\System.Collections.dll
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\System.Collections.Concurrent.dll
@@ -177,6 +179,8 @@ C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\D
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\FxResources.System.Xml.XDocument.SR.resw
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\FxResources.System.Xml.XmlDocument.SR.resw
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\FxResources.System.Xml.XmlSerializer.SR.resw
+C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MySql.Data.RT\en-US\MySql.Data.RT.Properties.Resources.resw
+C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MovementControl.csproj.GenerateResource.Cache
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\priconfig.xml
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\priconfig.xml.intermediate
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\layout.resfiles
@@ -190,5 +194,3 @@ C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\D
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MultipleQualifiersPerDimensionFound.txt
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\ProjectArchitectures.txt
 C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MovementControl.csprojResolveAssemblyReference.cache
-C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MySql.Data.RT\en-US\MySql.Data.RT.Properties.Resources.resw
-C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\obj\ARM\Debug\MovementControl.csproj.GenerateResource.Cache

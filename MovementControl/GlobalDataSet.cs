@@ -14,8 +14,17 @@ namespace MovementControl
         private byte[] send_Buffer = new byte[64];
         private Dxl_Control_Data dxlControlData = new Dxl_Control_Data();
         private SerialDevice port;
-        private List<int> zData_s0 = new List<int>();
-        private List<int> zData_s1 = new List<int>();
+        private string[] dbTableNames = { "moveforward", "movebackward", "movesleft"};
+        private int[] dBTableSizes;
+        private bool nextPosition = true;
+        private bool firstWriteExecuted = false;
+        private List<LocalList> moveforward = new List<LocalList>();
+        
+
+        public GlobalDataSet()
+        {
+            dBTableSizes = new int[dbTableNames.Length];
+        }
 
         public struct Dxl_Control_Data
         {
@@ -76,7 +85,6 @@ namespace MovementControl
             }
         }
 
-
         public byte[] sendBuffer
         {
             get
@@ -116,29 +124,68 @@ namespace MovementControl
             }
         }
 
-        public List<int> ZData_s0
+        public string[] DbNameList
         {
             get
             {
-                return zData_s0;
+                return dbTableNames;
             }
 
             set
             {
-                zData_s0 = value;
+                dbTableNames = value;
             }
         }
 
-        public List<int> ZData_s1
+        public int[] DBTableSizes
         {
             get
             {
-                return zData_s1;
+                return dBTableSizes;
             }
 
             set
             {
-                zData_s1 = value;
+                dBTableSizes = value;
+            }
+        }
+
+        public bool NextPositionRequest
+        {
+            get
+            {
+                return nextPosition;
+            }
+
+            set
+            {
+                nextPosition = value;
+            }
+        }
+
+        public bool FirstWriteExecuted
+        {
+            get
+            {
+                return firstWriteExecuted;
+            }
+
+            set
+            {
+                firstWriteExecuted = value;
+            }
+        }
+
+        public List<LocalList> Moveforward
+        {
+            get
+            {
+                return moveforward;
+            }
+
+            set
+            {
+                moveforward = value;
             }
         }
     }

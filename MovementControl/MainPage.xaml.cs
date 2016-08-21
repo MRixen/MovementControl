@@ -29,7 +29,7 @@ namespace MovementControl
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private Task task_robotControl;
+        private Task task_robotControl_write, task_robotControl_read;
         private Task task_initComPort, task_initDatabase;
         private GlobalDataSet globalDataSet;
         private RobotControl robotControl;
@@ -54,46 +54,59 @@ namespace MovementControl
             task_initDatabase.Start();
             task_initDatabase.Wait();
 
-
-            //task_initComPort = new Task(initComPort_task);
-            //task_initComPort.Start();
-            //task_initComPort.Wait();
+            task_initComPort = new Task(initComPort_task);
+            task_initComPort.Start();
+            task_initComPort.Wait();
 
             // Start control algorithm
-            //task_robotControl = new Task(robotControl_task);
-            //task_robotControl.Start();
+            task_robotControl_write = new Task(robotControl_task_write);
+            task_robotControl_write.Start();
+
+            task_robotControl_read = new Task(robotControl_task_read);
+            task_robotControl_read.Start();
+
         }
 
         private void initDatabase_task()
         {
             // Create local db
             int[] data = new int[4];
-            localDbManagement.createDb("moveforward");
+            localDbManagement.deleteTable_s0("moveforward");
+            localDbManagement.deleteTable_s1("moveforward");
+            //localDbManagement.createDb("moveforward");
 
-            // Connect to remote db
+            // Connect to remote db and read from remote db and save content to local db 
             string connectionString = "Server=192.168.0.66;Database=moveforward;Uid=root;Pwd=rbc;SslMode=None;";
             using (MySqlConnection dbConn = new MySqlConnection(connectionString))
             {
-                // Read from remote db and save content to local db 
                 // Todo: Read more tables -> Actual we read only s0 and s1
-                for (int i = 0; i < 2; i++)
-                {
-                    MySqlCommand dbCmd = new MySqlCommand("SELECT * FROM s" + i, dbConn);
-                    dbConn.Open();
+                // Todo: Get db and table count at first
 
-                    using (MySqlDataReader reader = dbCmd.ExecuteReader())
+                // Read from specific db
+                //for (int dbCounter  = 0; dbCounter < globalDataSet.DbNameList.Length; dbCounter++)
+                for (int dbCounter  = 0; dbCounter < 1; dbCounter++)
+                {
+                    // Read tables from specific db
+                    for (int rowCounter = 0; rowCounter < 2; rowCounter++)
                     {
-                        while (reader.Read())
+                        MySqlCommand dbCmd = new MySqlCommand("SELECT * FROM s" + rowCounter, dbConn);
+                        dbConn.Open();
+               
+                        using (MySqlDataReader reader = dbCmd.ExecuteReader())
                         {
-                            for (int j = 0; j < 4; j++) data[i] = reader.GetInt32(j);
-                            if (i == 0) localDbManagement.insertToTable_s0(data, "moveforward");
-                            if (i == 1) localDbManagement.insertToTable_s1(data, "moveforward");
+                            while (reader.Read())
+                            {
+                                for (int j = 0; j < 4; j++) data[j] = reader.GetInt32(j);
+                                localDbManagement.insertToTable(data, globalDataSet.DbNameList[dbCounter], rowCounter);
+                            }
                         }
+                        dbConn.Close();
                     }
-                    dbConn.Close();
+
                 }
-                // Set z data of tables to list, so we can use it inside movement control algorithm
-                localDbManagement.setDataLists_z("moveforward");
+                // Set z data of table to list, so we can use it inside movement control algorithm   
+                //for (int i = 0; i < globalDataSet.DbNameList.Length; i++) localDbManagement.setDataLists_z(globalDataSet.DbNameList[i]);
+                for (int i = 0; i < 1; i++) localDbManagement.setDataLists_z(globalDataSet.DbNameList[i]);
             }
         }
 
@@ -115,7 +128,7 @@ namespace MovementControl
                         Debug.WriteLine("UsbProductId: " + port.UsbProductId);
 
                         // Configure port
-                        port.BaudRate = 9600;
+                        port.BaudRate = 115200;
                         port.DataBits = 8;
                         port.StopBits = SerialStopBitCount.One;
                         port.Parity = SerialParity.None;
@@ -124,6 +137,7 @@ namespace MovementControl
                         port.WriteTimeout = TimeSpan.FromMilliseconds(1000);
 
                         globalDataSet.Port = port;
+                        
 
                         startTransfer = true;
                         break;
@@ -138,25 +152,41 @@ namespace MovementControl
             }
         }
 
-        public async void robotControl_task()
+        public async void robotControl_task_write()
         {
-            await Task.Run(() => execServ_openCM());
+            await Task.Run(() => execServ_openCM_write());
         }
 
-        private void execServ_openCM()
+        public async void robotControl_task_read()
+        {
+            await Task.Run(() => execServ_openCM_read());
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            textBox.Text = "Hello WOrld";
+        }
+
+        private void button_Click_Clear(object sender, RoutedEventArgs e)
+        {
+            textBox.Text = "";
+        }
+
+        private void execServ_openCM_write()
         {
             int stepsize = 100; // In percentage of max stepsize
-            int velocity = 300; // In percentage of max velocity
+            int velocity = 400; // In percentage of max velocity
             int steps = 1;
 
             while (!globalDataSet.StopAllOperations)
             {
                 // Send control data to openCM via usb
                 if (startTransfer)
-                {
+                { 
                     // Condition one is set - move forward
                     if (true)
                     {
+                        //Debug.WriteLine("Execute moveforward...");
                         robotControl.moveForward(stepsize, velocity, steps);
                     }
 
@@ -164,7 +194,19 @@ namespace MovementControl
                     if (true) ;
 
                 }
-                Task.Delay(-1).Wait(1000);
+                Task.Delay(-1).Wait(2000);
+            }
+        }
+
+        private void execServ_openCM_read()
+        {
+            while (!globalDataSet.StopAllOperations)
+            {
+                if (startTransfer)
+                {
+                    //Debug.WriteLine("Execute readSomething...");
+                    robotControl.readSomething();
+                }
             }
         }
     }

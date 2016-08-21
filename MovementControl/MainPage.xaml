@@ -11,6 +11,8 @@
         <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Name="StackPanel" VerticalAlignment="Top">
             <TextBlock x:Name="Title" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Movement Control" VerticalAlignment="Top"  Width="600" FontSize="36" TextAlignment="Center" Foreground="#FF193986"/>
         </StackPanel>
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="135,180,0,0" VerticalAlignment="Top" Background="#33FFFFFF" Foreground="White" Click="button_Click"/>
+        <Button x:Name="button" Content="Set Text" HorizontalAlignment="Left" Margin="115,185,0,0" VerticalAlignment="Top" Background="#33FFFFFF" Click="button_Click"/>
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Margin="200,185,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="175"/>
+        <Button x:Name="button_Copy" Content="Clear" HorizontalAlignment="Left" Margin="30,185,0,0" VerticalAlignment="Top" Background="#33FFFFFF" Click="button_Click_Clear"/>
     </Grid>
 </Page>

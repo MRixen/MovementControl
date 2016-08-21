@@ -70,6 +70,12 @@
     <AppxPackagedFile Include="C:\Users\Manuel.Rixen\.nuget\packages\Microsoft.Win32.Primitives\4.0.0\lib\dotnet\Microsoft.Win32.Primitives.dll">
       <PackagePath>Microsoft.Win32.Primitives.dll</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Manuel.Rixen\.nuget\packages\SQLite.Net-PCL\3.1.1\lib\Windows8\SQLite.Net.Platform.WinRT.dll">
+      <PackagePath>SQLite.Net.Platform.WinRT.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Manuel.Rixen\.nuget\packages\SQLite.Net.Core-PCL\3.1.1\lib\portable-win8+net45+wp8+wpa81+MonoAndroid1+MonoTouch1\SQLite.Net.dll">
+      <PackagePath>SQLite.Net.dll</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Manuel.Rixen\.nuget\packages\System.AppContext\4.0.0\lib\netcore50\System.AppContext.dll">
       <PackagePath>System.AppContext.dll</PackagePath>
     </AppxPackagedFile>
@@ -336,6 +342,9 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\bin\ARM\Debug\MySql.Data.RT.dll">
       <PackagePath>MySql.Data.RT.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Program Files %28x86%29\Microsoft SDKs\UAP\v0.8.0.0\ExtensionSDKs\SQLite.UWP.2015\3.14.0\Redist\Debug\ARM\sqlite3.dll">
+      <PackagePath>sqlite3.dll</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Manuel.Rixen\Documents\GitHub\MovementControl\MovementControl\Properties\Default.rd.xml">
       <PackagePath>Properties\Default.rd.xml</PackagePath>

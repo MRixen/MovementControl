@@ -97,6 +97,8 @@
     </Compile>
     <Compile Include="LocalDbManagement.cs" />
     <Compile Include="GlobalDataSet.cs" />
+    <Compile Include="LocalList.cs" />
+    <Compile Include="LocalTable.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
